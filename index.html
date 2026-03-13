@@ -59,8 +59,25 @@ border-radius:8px;
 margin-top:10px;
 }
 
+img{
+max-width:100%;
+border-radius:8px;
+margin-top:10px;
+}
+
+.biasLong{
+color:#00ff99;
+font-weight:bold;
+}
+
+.biasShort{
+color:#ff5c5c;
+font-weight:bold;
+}
+
 </style>
 </head>
+
 
 <body>
 
@@ -68,24 +85,29 @@ margin-top:10px;
 
 <h1>CryptoEdge Trading Planner</h1>
 
+
 <div class="card">
 
 <h3>Chart Analysis</h3>
 
 <p>Upload a chart screenshot for analysis.</p>
 
-<input type="file">
+<input type="file" id="chartUpload">
+
+<img id="chartPreview">
 
 </div>
+
 
 
 <div class="card">
 
 <h3>AI Market Bias</h3>
 
-<p id="bias">Waiting for analysis...</p>
+<p id="bias">Waiting for chart upload...</p>
 
 </div>
+
 
 
 <div class="card">
@@ -104,6 +126,7 @@ margin-top:10px;
 </div>
 
 
+
 <div class="card">
 
 <h3>Risk Dashboard</h3>
@@ -111,6 +134,7 @@ margin-top:10px;
 <p id="riskinfo">Enter trade details to calculate risk.</p>
 
 </div>
+
 
 
 <div class="card">
@@ -129,10 +153,66 @@ margin-top:10px;
 
 </div>
 
+
 </div>
 
 
+
 <script>
+
+const preview = document.getElementById("chartPreview")
+const upload = document.getElementById("chartUpload")
+
+upload.addEventListener("change", function(){
+
+const file = this.files[0]
+
+if(!file) return
+
+const reader = new FileReader()
+
+reader.onload = function(e){
+
+preview.src = e.target.result
+
+simulateAI()
+
+}
+
+reader.readAsDataURL(file)
+
+})
+
+
+function simulateAI(){
+
+let biasBox = document.getElementById("bias")
+
+let random = Math.random()
+
+if(random > 0.5){
+
+biasBox.innerHTML = "AI Bias: <span class='biasLong'>BULLISH</span><br>Suggested entry and stop loaded."
+
+document.getElementById("entry").value = 65000
+document.getElementById("sl").value = 64000
+document.getElementById("tp").value = 67000
+
+}else{
+
+biasBox.innerHTML = "AI Bias: <span class='biasShort'>BEARISH</span><br>Suggested entry and stop loaded."
+
+document.getElementById("entry").value = 65000
+document.getElementById("sl").value = 66000
+document.getElementById("tp").value = 63000
+
+}
+
+generate()
+
+}
+
+
 
 function generate(){
 
@@ -140,13 +220,8 @@ let capital = parseFloat(document.getElementById("capital").value)
 let risk = parseFloat(document.getElementById("risk").value)/100
 let entry = parseFloat(document.getElementById("entry").value)
 let sl = parseFloat(document.getElementById("sl").value)
-document.getElementById("entry").addEventListener("input",generate)
-document.getElementById("sl").addEventListener("input",generate)
-document.getElementById("capital").addEventListener("input",generate)
-document.getElementById("risk").addEventListener("input",generate)
-  
+
 if(!capital || !entry || !sl){
-alert("Please fill entry, stop loss, and capital")
 return
 }
 
@@ -154,13 +229,19 @@ let riskAmount = capital * risk
 let slDistance = Math.abs(entry-sl)
 let slPercent = slDistance / entry
 
+let position = riskAmount / slPercent
+
+document.getElementById("riskinfo").innerHTML =
+"Max Risk: $" + riskAmount.toFixed(2) +
+"<br>Stop Distance: $" + slDistance.toFixed(2) +
+"<br>Position Size: $" + position.toFixed(2)
+
 let leverage = [3,5,10]
 
 let html=""
 
 leverage.forEach(function(l){
 
-let position = riskAmount / slPercent
 let margin = position / l
 
 let tp = entry + slDistance*2
@@ -180,8 +261,15 @@ document.getElementById("output").innerHTML = html
 
 }
 
+
+
+document.getElementById("entry").addEventListener("input",generate)
+document.getElementById("sl").addEventListener("input",generate)
+document.getElementById("capital").addEventListener("input",generate)
+document.getElementById("risk").addEventListener("input",generate)
+
 </script>
+
 
 </body>
 </html>
-
