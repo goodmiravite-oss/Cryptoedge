@@ -1,0 +1,145 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>CryptoEdge</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+
+body{
+font-family:Arial;
+background:#0b0e13;
+color:white;
+padding:40px;
+}
+
+.container{
+max-width:800px;
+margin:auto;
+}
+
+.card{
+background:#151a25;
+padding:20px;
+border-radius:10px;
+margin-bottom:20px;
+}
+
+input{
+width:100%;
+padding:10px;
+margin-top:5px;
+margin-bottom:15px;
+border-radius:6px;
+border:none;
+}
+
+button{
+background:#00e5ff;
+border:none;
+padding:12px 20px;
+border-radius:6px;
+cursor:pointer;
+font-weight:bold;
+}
+
+.plan{
+background:#1a2030;
+padding:15px;
+border-radius:8px;
+margin-top:10px;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>CryptoEdge Trading Planner</h1>
+
+<div class="card">
+
+<h3>Chart Analysis</h3>
+
+<p>Upload your chart screenshot for analysis.</p>
+
+<input type="file">
+
+</div>
+
+<div class="card">
+
+<h3>Position Setup</h3>
+
+<label>Entry Price</label>
+<input id="entry">
+
+<label>Stop Loss</label>
+<input id="sl">
+
+</div>
+
+<div class="card">
+
+<h3>AI Trade Plan</h3>
+
+<label>Total Capital ($)</label>
+<input id="capital">
+
+<label>Risk Per Trade (%)</label>
+<input id="risk" value="1">
+
+<button onclick="generate()">Generate Trade Plan</button>
+
+<div id="output"></div>
+
+</div>
+
+</div>
+
+<script>
+
+function generate(){
+
+let capital = parseFloat(document.getElementById("capital").value)
+let risk = parseFloat(document.getElementById("risk").value)/100
+let entry = parseFloat(document.getElementById("entry").value)
+let sl = parseFloat(document.getElementById("sl").value)
+
+let riskAmount = capital * risk
+let slDistance = Math.abs(entry-sl)
+let slPercent = slDistance / entry
+
+let leverage = [3,5,10]
+
+let html=""
+
+leverage.forEach(function(l){
+
+let position = riskAmount / slPercent
+let margin = position / l
+
+let tp = entry + slDistance*2
+let coins = position / entry
+let profit = (tp-entry)*coins
+
+html += "<div class='plan'>"
+html += "<b>Leverage:</b> "+l+"x<br>"
+html += "Margin: $"+margin.toFixed(2)+"<br>"
+html += "Target Price: $"+tp.toFixed(2)+"<br>"
+html += "Profit: $"+profit.toFixed(2)
+html += "</div>"
+
+})
+
+document.getElementById("output").innerHTML = html
+
+}
+
+</script>
+
+</body>
+</html>
