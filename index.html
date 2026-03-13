@@ -140,7 +140,11 @@ let capital = parseFloat(document.getElementById("capital").value)
 let risk = parseFloat(document.getElementById("risk").value)/100
 let entry = parseFloat(document.getElementById("entry").value)
 let sl = parseFloat(document.getElementById("sl").value)
-
+document.getElementById("entry").addEventListener("input",generate)
+document.getElementById("sl").addEventListener("input",generate)
+document.getElementById("capital").addEventListener("input",generate)
+document.getElementById("risk").addEventListener("input",generate)
+  
 if(!capital || !entry || !sl){
 alert("Please fill entry, stop loss, and capital")
 return
@@ -180,3 +184,4 @@ document.getElementById("output").innerHTML = html
 
 </body>
 </html>
+
