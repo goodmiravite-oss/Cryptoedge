@@ -1,8 +1,7 @@
-
 <!DOCTYPE html>
 <html>
 <head>
-<title>CryptoEdge</title>
+<title>CryptoEdge Trading Planner</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
@@ -14,6 +13,11 @@ color:white;
 padding:40px;
 }
 
+.container{
+max-width:900px;
+margin:auto;
+}
+
 .card{
 background:#151a25;
 padding:20px;
@@ -21,15 +25,21 @@ border-radius:12px;
 margin-bottom:20px;
 box-shadow:0 5px 20px rgba(0,0,0,0.4);
 }
+
+h1{
+text-align:center;
+margin-bottom:30px;
 }
 
 input{
 width:100%;
-padding:10px;
+padding:12px;
 margin-top:5px;
 margin-bottom:15px;
 border-radius:6px;
 border:none;
+background:#1a2030;
+color:white;
 }
 
 button{
@@ -39,6 +49,7 @@ padding:12px 20px;
 border-radius:6px;
 cursor:pointer;
 font-weight:bold;
+color:black;
 }
 
 .plan{
@@ -56,9 +67,11 @@ margin-top:10px;
 <div class="container">
 
 <h1>CryptoEdge Trading Planner</h1>
+
 <div class="card">
 
 <h3>Chart Analysis</h3>
+
 <p>Upload a chart screenshot for analysis.</p>
 
 <input type="file">
@@ -116,45 +129,8 @@ margin-top:10px;
 
 </div>
 
-<div class="card">
-
-<h3>Chart Analysis</h3>
-
-<p>Upload your chart screenshot for analysis.</p>
-
-<input type="file">
-
 </div>
 
-<div class="card">
-
-<h3>Position Setup</h3>
-
-<label>Entry Price</label>
-<input id="entry">
-
-<label>Stop Loss</label>
-<input id="sl">
-
-</div>
-
-<div class="card">
-
-<h3>AI Trade Plan</h3>
-
-<label>Total Capital ($)</label>
-<input id="capital">
-
-<label>Risk Per Trade (%)</label>
-<input id="risk" value="1">
-
-<button onclick="generate()">Generate Trade Plan</button>
-
-<div id="output"></div>
-
-</div>
-
-</div>
 
 <script>
 
@@ -164,6 +140,11 @@ let capital = parseFloat(document.getElementById("capital").value)
 let risk = parseFloat(document.getElementById("risk").value)/100
 let entry = parseFloat(document.getElementById("entry").value)
 let sl = parseFloat(document.getElementById("sl").value)
+
+if(!capital || !entry || !sl){
+alert("Please fill entry, stop loss, and capital")
+return
+}
 
 let riskAmount = capital * risk
 let slDistance = Math.abs(entry-sl)
@@ -199,4 +180,3 @@ document.getElementById("output").innerHTML = html
 
 </body>
 </html>
-
